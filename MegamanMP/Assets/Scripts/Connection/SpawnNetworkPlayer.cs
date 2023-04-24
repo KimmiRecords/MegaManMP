@@ -20,8 +20,7 @@ public class SpawnNetworkPlayer : MonoBehaviour, INetworkRunnerCallbacks
     {
         if (runner.Topology == SimulationConfig.Topologies.Shared)
         {
-            Debug.Log("[CustomMsg] On Connected To Server - Spawning Player as Local");
-
+            //Debug.Log("[CustomMsg] On Connected To Server - Spawning Player as Local");
             Vector3 randomSpawnPoint = _spawnPoint[UnityEngine.Random.Range(0, 2)].position;
             runner.Spawn(_playerPrefab, randomSpawnPoint, Quaternion.identity, runner.LocalPlayer);
         }

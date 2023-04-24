@@ -15,24 +15,23 @@ public class NetworkPlayer : NetworkBehaviour, INetworkRunnerCallbacks
         if (Object.HasInputAuthority)
         {
             Local = this;
-            Debug.Log("[custom msg] spawned own player");
+            //Debug.Log("[custom msg] spawned own player");
         }
         else
         {
-            Debug.Log("[custom msg] spawned other player");
-
+            //Debug.Log("[custom msg] spawned other player");
         }
         base.Spawned();
-        GameManager.Instance.PlayerCount++;
-        Debug.Log("[custom msg] hay " + GameManager.Instance.PlayerCount + " players");
+        GameManager.Instance.AddPlayerToList(this);
+        //Debug.Log("[custom msg] hay " + GameManager.Instance.PlayerCount + " players");
 
     }
 
     public override void Despawned(NetworkRunner runner, bool hasState)
     {
         base.Despawned(runner, hasState);
-        GameManager.Instance.PlayerCount--;
-        Debug.Log("[custom msg] despawned. hay " + GameManager.Instance.PlayerCount + " players");
+        GameManager.Instance.RemovePlayerFromList(this);
+        //Debug.Log("[custom msg] despawned. hay " + GameManager.Instance.PlayerCount + " players");
     }
 
     #region
