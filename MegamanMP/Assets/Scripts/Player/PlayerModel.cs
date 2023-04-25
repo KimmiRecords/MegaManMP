@@ -17,7 +17,7 @@ public class PlayerModel : NetworkBehaviour
     [Networked(OnChanged = nameof(LifeChangedCallback))]
     [SerializeField] float _life { get; set; }
 
-    [Networked(OnChanged = nameof(PointsChangedCallback))]
+    [Networked/*(OnChanged = nameof(PointsChangedCallback))*/]
     [SerializeField] int _points { get; set; }
 
     [Networked(OnChanged = nameof(ShootChangedCallback))]
@@ -29,9 +29,14 @@ public class PlayerModel : NetworkBehaviour
     public event Action<float> OnUpdateLifebar = delegate { };
     public event Action OnPlayerDestroyed = delegate {};
 
+    [Networked(OnChanged = nameof(inAltarChangedCallback))]
+    bool inAltar { get; set; }
+
     void Start()
     {
         transform.forward = Vector3.right;
+
+        //guardar mi posicion de spawn para la proxima
     }
 
     public override void Spawned()
@@ -127,11 +132,11 @@ public class PlayerModel : NetworkBehaviour
         changed.Behaviour.OnUpdateLifebar(changed.Behaviour._life / 100f);
     }
 
-    static void PointsChangedCallback(Changed<PlayerModel> changed)
-    {
-        //Debug.Log("[PlayerModel - PointsChangedCallback]");
-        //changed.Behaviour.OnUpdateLifebar(changed.Behaviour._life / 100f);
-    }
+    //static void PointsChangedCallback(Changed<PlayerModel> changed)
+    //{
+    //    //Debug.Log("[PlayerModel - PointsChangedCallback]");
+    //    //changed.Behaviour.OnUpdateLifebar(changed.Behaviour._life / 100f);
+    //}
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     void RPC_GetHit(float dmg)
@@ -149,18 +154,27 @@ public class PlayerModel : NetworkBehaviour
         RPC_GetHit(dmg);
     }
 
-    public void AddPoints(int points)
-    {
-        RPC_AddPoints(points);
-    }
-
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    void RPC_AddPoints(int points)
+    void RPC_AddPoints()
     {
-        _points += points;
+        _points++;
+        transform.position = Vector3.zero;
         Debug.LogWarning("le agregue points a " + this);
     }
 
+    public void EnterAltar()
+    {
+        inAltar = true;
+    }
+
+    static void inAltarChangedCallback(Changed<PlayerModel> changed)
+    {
+        if (changed.Behaviour.inAltar)
+        {
+            changed.Behaviour.RPC_AddPoints();
+            changed.Behaviour.inAltar = false;
+        }
+    }
     void Dead()
     {
         Debug.LogWarning("Player " + this + " muerto");
@@ -170,5 +184,4 @@ public class PlayerModel : NetworkBehaviour
     {
         OnPlayerDestroyed();
     }
-
 }
