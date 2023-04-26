@@ -35,7 +35,6 @@ public class PlayerModel : NetworkBehaviour
     float _maxLife;
     float _maxSpeed;
     Vector3 spawnPosition;
-
     void Start()
     {
         transform.forward = Vector3.right;
@@ -43,16 +42,13 @@ public class PlayerModel : NetworkBehaviour
         spawnPosition = transform.position;
         _maxLife = _life;
         _maxSpeed = _speed;
-        //guardar mi posicion de spawn para la proxima
     }
-
     public override void Spawned()
     {
         base.Spawned();
         CanvasLifebar lifebarManager = FindObjectOfType<CanvasLifebar>(); //esto no es optimo
         lifebarManager?.SpawnBar(this);
     }
-
     public override void FixedUpdateNetwork()
     {
         if (GetInput(out NetworkInputData networkInputData))
@@ -94,7 +90,6 @@ public class PlayerModel : NetworkBehaviour
             _animator.SetFloat("MovementValue", 0);
         }
     }
-
     void Jump()
     {
         _rgbd.Rigidbody.AddForce(Vector3.up * _jumpForce, ForceMode.VelocityChange);
@@ -133,7 +128,6 @@ public class PlayerModel : NetworkBehaviour
             changed.Behaviour._shootParticle.Play();
         }
     }
-
     static void LifeChangedCallback(Changed<PlayerModel> changed)
     {
         changed.Behaviour.OnUpdateLifebar(changed.Behaviour._life / 100f);
@@ -161,6 +155,7 @@ public class PlayerModel : NetworkBehaviour
         RPC_GetHit(dmg);
     }
 
+
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     void RPC_AddPoints()
     {
@@ -169,12 +164,10 @@ public class PlayerModel : NetworkBehaviour
         Debug.LogWarning("le agregue points a " + this);
         StartCoroutine(ShowVictoryScreenCoroutine());
     }
-
     public void EnterAltar()
     {
         inAltar = true;
     }
-
     static void inAltarChangedCallback(Changed<PlayerModel> changed)
     {
         if (changed.Behaviour.inAltar)
@@ -183,6 +176,7 @@ public class PlayerModel : NetworkBehaviour
             changed.Behaviour.inAltar = false;
         }
     }
+
     void Dead()
     {
         Debug.LogWarning("Player " + this + " muerto");
@@ -203,7 +197,6 @@ public class PlayerModel : NetworkBehaviour
         yield return new WaitForSeconds(screenDuration);
         GameManager.Instance.HideDeathScreen();
     }
-
     public IEnumerator ShowVictoryScreenCoroutine()
     {
         _speed = 0;

@@ -8,30 +8,21 @@ using System;
 public class NetworkPlayer : NetworkBehaviour, INetworkRunnerCallbacks
 {
     public static NetworkPlayer Local { get; private set; }
-    //public static int playerCount;
 
     public override void Spawned()
     {
         if (Object.HasInputAuthority)
         {
             Local = this;
-            //Debug.Log("[custom msg] spawned own player");
-        }
-        else
-        {
-            //Debug.Log("[custom msg] spawned other player");
         }
         base.Spawned();
         GameManager.Instance.AddPlayerToList(this);
-        //Debug.Log("[custom msg] hay " + GameManager.Instance.PlayerCount + " players");
-
     }
 
     public override void Despawned(NetworkRunner runner, bool hasState)
     {
         base.Despawned(runner, hasState);
         GameManager.Instance.RemovePlayerFromList(this);
-        //Debug.Log("[custom msg] despawned. hay " + GameManager.Instance.PlayerCount + " players");
     }
 
     #region

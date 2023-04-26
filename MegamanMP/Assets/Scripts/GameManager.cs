@@ -28,8 +28,6 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     [SerializeField]
     GameObject _pauseCanvas;
     [SerializeField]
-    ScoreText _scoreText;
-    [SerializeField]
     DeathScreen _deathScreen;
     [SerializeField]
     VictoryScreen _victoryScreen;
@@ -37,8 +35,6 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     [HideInInspector]
     public bool playerAgency = true;
     public List<NetworkPlayer> networkPlayers = new List<NetworkPlayer>();
-
-    public Dictionary<PlayerModel, int> playersAndScores = new Dictionary<PlayerModel, int>();
 
     void Start()
     {
@@ -67,35 +63,15 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
             //print("ahora si pueden jugar");
         }
     }
-
     public void AddPlayerToList(NetworkPlayer np)
     {
         networkPlayers.Add(np);
         PlayerCount++;
-
-        if (np.GetComponent<PlayerModel>() != null)
-        {
-            //PlayerModel player = np.GetComponent<PlayerModel>();
-            //playersAndScores.Add(player, player.Points);
-        }
-
-        //_scoreText.UpdateText(playersAndScores);
     }
-
     public void RemovePlayerFromList(NetworkPlayer np)
     {
         networkPlayers.Remove(np);
         PlayerCount--;
-
-        //playersAndScores.Remove(np.GetComponent<PlayerModel>());
-        //_scoreText.UpdateText(playersAndScores);
-    }
-
-    public void UpdatePlayerScore(PlayerModel pm, int newScore)
-    {
-        //playersAndScores[pm] = newScore;
-        //_scoreText.UpdateText(playersAndScores);
-        Debug.Log("actualice el score" /*+ pm + " a " + playersAndScores[pm]*/);
     }
 
     public float ShowDeathScreen()
