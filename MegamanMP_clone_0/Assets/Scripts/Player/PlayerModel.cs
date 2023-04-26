@@ -27,6 +27,8 @@ public class PlayerModel : NetworkBehaviour
     float _lastFireTime;
 
     public event Action<float> OnUpdateLifebar = delegate { };
+    public event Action<float> OnUpdatePointsbar = delegate { };
+
     public event Action OnPlayerDestroyed = delegate {};
 
     [Networked(OnChanged = nameof(inAltarChangedCallback))]
@@ -47,7 +49,11 @@ public class PlayerModel : NetworkBehaviour
     {
         base.Spawned();
         CanvasLifebar lifebarManager = FindObjectOfType<CanvasLifebar>(); //esto no es optimo
+        CanvasPointsbar pointsbarManager = FindObjectOfType<CanvasPointsbar>(); //esto no es optimo
+
         lifebarManager?.SpawnBar(this);
+        pointsbarManager?.SpawnBar(this);
+
     }
     public override void FixedUpdateNetwork()
     {

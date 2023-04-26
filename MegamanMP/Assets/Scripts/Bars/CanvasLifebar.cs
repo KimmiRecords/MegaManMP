@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-
-
 public class CanvasLifebar : MonoBehaviour
 {
     [SerializeField] Lifebar _lifebarPrefab;
