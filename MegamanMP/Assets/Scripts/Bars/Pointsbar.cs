@@ -8,7 +8,7 @@ public class Pointsbar : MonoBehaviour
 {
     Transform _target;
     [SerializeField] float _yOffset;
-    [SerializeField] Image _myFillable;
+    [SerializeField] TMPro.TextMeshPro _myText;
 
     public Pointsbar SetTarget(PlayerModel player)
     {
@@ -25,21 +25,7 @@ public class Pointsbar : MonoBehaviour
 
     public void UpdateBar(float amount)
     {
-        StopAllCoroutines();
-        StartCoroutine(LerpAmount(amount));
-        //_myFillable.fillAmount = amount;
-    }
-
-    IEnumerator LerpAmount(float amount)
-    {
-        float ticks = 0;
-        float startAmount = _myFillable.fillAmount;
-        while (ticks <= 0.5)
-        {
-            _myFillable.fillAmount = Mathf.Lerp(startAmount, amount, ticks);
-            ticks += Time.deltaTime;
-            yield return null;
-        }
+        _myText.text = amount.ToString();
     }
 
 }

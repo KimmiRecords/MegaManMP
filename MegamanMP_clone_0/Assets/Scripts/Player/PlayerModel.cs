@@ -17,7 +17,7 @@ public class PlayerModel : NetworkBehaviour
     [Networked(OnChanged = nameof(LifeChangedCallback))]
     [SerializeField] float _life { get; set; }
 
-    [Networked/*(OnChanged = nameof(PointsChangedCallback))*/]
+    [Networked(OnChanged = nameof(PointsChangedCallback))]
     [SerializeField] int _points { get; set; }
 
     [Networked(OnChanged = nameof(ShootChangedCallback))]
@@ -136,14 +136,14 @@ public class PlayerModel : NetworkBehaviour
     }
     static void LifeChangedCallback(Changed<PlayerModel> changed)
     {
-        changed.Behaviour.OnUpdateLifebar(changed.Behaviour._life / 100f);
+        changed.Behaviour.OnUpdateLifebar(changed.Behaviour._life / changed.Behaviour._maxLife);
     }
 
-    //static void PointsChangedCallback(Changed<PlayerModel> changed)
-    //{
-    //    //Debug.Log("[PlayerModel - PointsChangedCallback]");
-    //    //changed.Behaviour.OnUpdateLifebar(changed.Behaviour._life / 100f);
-    //}
+    static void PointsChangedCallback(Changed<PlayerModel> changed)
+    {
+        Debug.Log("[PlayerModel - PointsChangedCallback]");
+        changed.Behaviour.OnUpdatePointsbar(changed.Behaviour._points);
+    }
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     void RPC_GetHit(float dmg)
