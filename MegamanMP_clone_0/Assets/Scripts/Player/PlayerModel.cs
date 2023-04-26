@@ -32,10 +32,17 @@ public class PlayerModel : NetworkBehaviour
     [Networked(OnChanged = nameof(inAltarChangedCallback))]
     bool inAltar { get; set; }
 
+    float _maxLife;
+    float _maxSpeed;
+    Vector3 spawnPosition;
+
     void Start()
     {
         transform.forward = Vector3.right;
 
+        spawnPosition = transform.position;
+        _maxLife = _life;
+        _maxSpeed = _speed;
         //guardar mi posicion de spawn para la proxima
     }
 
@@ -158,8 +165,9 @@ public class PlayerModel : NetworkBehaviour
     void RPC_AddPoints()
     {
         _points++;
-        transform.position = Vector3.zero;
+        transform.position = spawnPosition;
         Debug.LogWarning("le agregue points a " + this);
+        StartCoroutine(ShowVictoryScreenCoroutine());
     }
 
     public void EnterAltar()
@@ -178,10 +186,33 @@ public class PlayerModel : NetworkBehaviour
     void Dead()
     {
         Debug.LogWarning("Player " + this + " muerto");
-        Runner.Shutdown(); //en realidad deberia mostrarse un YOU DIED o algo asi
+        transform.position = spawnPosition;
+        _life = _maxLife;
+        StartCoroutine(ShowDeathScreenCoroutine());
+
+        //Runner.Shutdown(); //en realidad deberia mostrarse un YOU DIED o algo asi
     }
     public override void Despawned(NetworkRunner runner, bool hasState)
     {
         OnPlayerDestroyed();
+    }
+
+    public IEnumerator ShowDeathScreenCoroutine()
+    {
+        float screenDuration = GameManager.Instance.ShowDeathScreen();
+        yield return new WaitForSeconds(screenDuration);
+        GameManager.Instance.HideDeathScreen();
+    }
+
+    public IEnumerator ShowVictoryScreenCoroutine()
+    {
+        _speed = 0;
+        float screenDuration = GameManager.Instance.ShowVictoryScreen();
+
+        yield return new WaitForSeconds(screenDuration);
+
+        _speed = _maxSpeed;
+        GameManager.Instance.HideVictoryScreen();
+
     }
 }

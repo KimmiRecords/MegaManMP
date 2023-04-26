@@ -29,6 +29,10 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     GameObject _pauseCanvas;
     [SerializeField]
     ScoreText _scoreText;
+    [SerializeField]
+    DeathScreen _deathScreen;
+    [SerializeField]
+    VictoryScreen _victoryScreen;
 
     [HideInInspector]
     public bool playerAgency = true;
@@ -92,6 +96,29 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
         //playersAndScores[pm] = newScore;
         //_scoreText.UpdateText(playersAndScores);
         Debug.Log("actualice el score" /*+ pm + " a " + playersAndScores[pm]*/);
+    }
+
+    public float ShowDeathScreen()
+    {
+        _deathScreen.gameObject.SetActive(true);
+        playerAgency = false;
+        return _deathScreen.duration;
+    }
+    public void HideDeathScreen()
+    {
+        _deathScreen.gameObject.SetActive(false);
+        playerAgency = true;
+    }
+    public float ShowVictoryScreen()
+    {
+        _victoryScreen.gameObject.SetActive(true);
+        playerAgency = false;
+        return _victoryScreen.duration;
+    }
+    public void HideVictoryScreen()
+    {
+        _victoryScreen.gameObject.SetActive(false);
+        playerAgency = true;
     }
 
     #region //callbacks q no uso
