@@ -19,7 +19,8 @@ public class AltarArea : NetworkBehaviour
         {
             Debug.Log(otherPlayer.gameObject.name + " entro al trigger");
             otherPlayer.EnterAltar();
-            //otherPlayer.transform.position = Vector3.zero;
         }
     }
+
+    
 }

@@ -7,6 +7,8 @@ public class CharacterInputHandler : MonoBehaviour
     float _moveInput;
     bool _isJumpPressed;
     bool _isFirePressed;
+    bool _isBootsPressed;
+
 
     PlayerModel _myModel;
     NetworkInputData _inputData;
@@ -48,14 +50,19 @@ public class CharacterInputHandler : MonoBehaviour
 
         _moveInput = Input.GetAxis("Horizontal");
 
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space))
         {
             _isJumpPressed = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             _isFirePressed = true;
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            _isBootsPressed = true;
         }
     }
 
@@ -63,7 +70,6 @@ public class CharacterInputHandler : MonoBehaviour
     //esto lo ejecuta el spawner para enterarse de los inputs
     public NetworkInputData GetNetworkInput()
     {
-
         _inputData.movementInput = _moveInput;
 
         _inputData.isJumpPressed = _isJumpPressed;
@@ -71,6 +77,9 @@ public class CharacterInputHandler : MonoBehaviour
 
         _inputData.isFirePressed = _isFirePressed;
         _isFirePressed = false;
+
+        _inputData.isBootsPressed = _isBootsPressed;
+        _isBootsPressed = false;
 
         return _inputData;
     }

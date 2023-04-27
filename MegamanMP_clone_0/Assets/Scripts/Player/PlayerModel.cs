@@ -37,6 +37,7 @@ public class PlayerModel : NetworkBehaviour
     float _maxLife;
     float _maxSpeed;
     Vector3 spawnPosition;
+    bool _isBoots;
     void Start()
     {
         transform.forward = Vector3.right;
@@ -69,6 +70,11 @@ public class PlayerModel : NetworkBehaviour
             if (networkInputData.isFirePressed)
             {
                 Shoot();
+            }
+
+            if (networkInputData.isBootsPressed)
+            {
+                ToggleBoots();
             }
         }
     }
@@ -113,6 +119,19 @@ public class PlayerModel : NetworkBehaviour
         _lastFireTime = Time.time;
 
         Runner.Spawn(_bulletPrefab, _firePosition.position, transform.rotation);
+    }
+    void ToggleBoots()
+    {
+        if (_isBoots)
+        {
+            Physics.gravity = new Vector3(0,-5,0);
+        }
+        else
+        {
+            Physics.gravity = new Vector3(0, -90, 0);
+        }
+
+        _isBoots = !_isBoots;
     }
     IEnumerator ShootCooldown()
     {
