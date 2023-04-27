@@ -42,6 +42,11 @@ public class CharacterInputHandler : MonoBehaviour
             return;
         }
 
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+
         if (!GameManager.Instance.playerAgency) //solo toma inputs de playermodels con agency
         {
             return;
@@ -64,6 +69,8 @@ public class CharacterInputHandler : MonoBehaviour
         {
             _isBootsPressed = true;
         }
+
+        
     }
 
 
