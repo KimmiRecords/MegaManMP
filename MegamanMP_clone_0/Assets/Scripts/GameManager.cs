@@ -31,8 +31,6 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     DeathScreen _deathScreen;
     [SerializeField]
     VictoryScreen _victoryScreen;
-    [SerializeField]
-    AltarArea _altar;
 
     [HideInInspector]
     public bool playerAgency = true;

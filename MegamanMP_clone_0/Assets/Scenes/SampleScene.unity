@@ -486,7 +486,6 @@ MonoBehaviour:
   _pauseCanvas: {fileID: 1319471107}
   _deathScreen: {fileID: 182598829}
   _victoryScreen: {fileID: 1753209763}
-  _altar: {fileID: 877662539}
   playerAgency: 1
   networkPlayers: []
 --- !u!1 &384770760
@@ -1550,7 +1549,7 @@ MonoBehaviour:
   AoiPositionSource: {fileID: 0}
   Flags: 2561
   NetworkGuid:
-    RawGuidValue: 56ac13e0ff6c4b3481320ff6af11228e
+    RawGuidValue: cf6a8ccf275e4d5484f372d673ff41a4
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 877662539}
