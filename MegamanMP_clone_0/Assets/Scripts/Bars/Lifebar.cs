@@ -26,7 +26,8 @@ public class Lifebar : MonoBehaviour
     public void UpdateBar(float amount)
     {
         StopAllCoroutines();
-        StartCoroutine(LerpAmount(amount));
+        _myFillable.fillAmount = amount;
+        //StartCoroutine(LerpAmount(amount));
         //_myFillable.fillAmount = amount;
     }
 

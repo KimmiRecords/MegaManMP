@@ -167,12 +167,15 @@ public class PlayerModel : NetworkBehaviour
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     void RPC_GetHit(float dmg)
     {
-        _life -= dmg;
-        Debug.LogWarning("le sacaron vida a " + this);
-
-        if (_life <= 0)
+        if (GameManager.Instance.playerAgency)
         {
-            Dead();
+            _life -= dmg;
+            Debug.LogWarning("le sacaron vida a " + this);
+
+            if (_life <= 0)
+            {
+                Dead();
+            }
         }
     }
     public void TakeDamage(float dmg)

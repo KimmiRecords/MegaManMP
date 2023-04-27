@@ -42,7 +42,7 @@ public class CharacterInputHandler : MonoBehaviour
             return;
         }
 
-        if (!GameManager.Instance.playerAgency) //solo toma inputs de playermodels con input auth
+        if (!GameManager.Instance.playerAgency) //solo toma inputs de playermodels con agency
         {
             return;
         }
