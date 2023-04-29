@@ -74,7 +74,7 @@ public class CharacterInputHandler : MonoBehaviour
     }
 
 
-    //esto lo ejecuta el spawner para enterarse de los inputs
+    //esto lo ejecuta el playermodel para enterarse de los inputs
     public NetworkInputData GetNetworkInput()
     {
         _inputData.movementInput = _moveInput;

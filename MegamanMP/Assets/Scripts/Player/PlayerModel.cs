@@ -11,6 +11,8 @@ public class PlayerModel : NetworkBehaviour
     [SerializeField] Bullet _bulletPrefab;
     [SerializeField] ParticleSystem _shootParticle;
     [SerializeField] Transform _firePosition;
+    [SerializeField] Renderer _myRenderer;
+
     [SerializeField] float _speed;
     [SerializeField] float _jumpForce;
 
@@ -38,19 +40,21 @@ public class PlayerModel : NetworkBehaviour
     float _maxSpeed;
     Vector3 spawnPosition;
     bool _isBoots;
+
     void Start()
     {
         transform.forward = Vector3.right;
-
         spawnPosition = transform.position;
         _maxLife = _life;
         _maxSpeed = _speed;
+
+        _myRenderer.material.color = UnityEngine.Random.ColorHSV(0, 1, 1, 1, 1, 1);
     }
     public override void Spawned()
     {
         base.Spawned();
         CanvasLifebar lifebarManager = FindObjectOfType<CanvasLifebar>(); //esto no es optimo
-        CanvasPointsbar pointsbarManager = FindObjectOfType<CanvasPointsbar>(); //esto no es optimo
+        CanvasPointsbar pointsbarManager = FindObjectOfType<CanvasPointsbar>();
 
         lifebarManager?.SpawnBar(this);
         pointsbarManager?.SpawnBar(this);
