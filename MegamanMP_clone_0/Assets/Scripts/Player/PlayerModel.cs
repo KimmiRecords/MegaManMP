@@ -9,12 +9,16 @@ public class PlayerModel : NetworkBehaviour
     [SerializeField] NetworkRigidbody _rgbd;
     [SerializeField] Animator _animator;
     [SerializeField] Bullet _bulletPrefab;
+    [SerializeField] Rocket _rocketPrefab;
     [SerializeField] ParticleSystem _shootParticle;
     [SerializeField] Transform _firePosition;
     [SerializeField] Renderer _myRenderer;
 
     [SerializeField] float _speed;
     [SerializeField] float _jumpForce;
+    [SerializeField] float _shootCooldown;
+    [SerializeField] float _shootRocketCooldown;
+
 
     [Networked(OnChanged = nameof(LifeChangedCallback))]
     [SerializeField] float _life { get; set; }
@@ -30,7 +34,6 @@ public class PlayerModel : NetworkBehaviour
 
     public event Action<float> OnUpdateLifebar = delegate { };
     public event Action<float> OnUpdatePointsbar = delegate { };
-
     public event Action OnPlayerDestroyed = delegate {};
 
     [Networked(OnChanged = nameof(inAltarChangedCallback))]
@@ -40,6 +43,10 @@ public class PlayerModel : NetworkBehaviour
     float _maxSpeed;
     Vector3 spawnPosition;
     bool _isBoots;
+    [Networked(OnChanged = nameof(colorChangedCallback))]
+    Color _currentColor { get; set; }
+
+    Color _originalColor;
 
     void Start()
     {
@@ -47,8 +54,9 @@ public class PlayerModel : NetworkBehaviour
         spawnPosition = transform.position;
         _maxLife = _life;
         _maxSpeed = _speed;
-
-        _myRenderer.material.color = UnityEngine.Random.ColorHSV(0, 1, 1, 1, 1, 1);
+        _originalColor = UnityEngine.Random.ColorHSV(0, 1, 1, 1, 1, 1);
+        _currentColor = _originalColor;
+        //_myRenderer.material.color = _currentColor;
     }
     public override void Spawned()
     {
@@ -74,6 +82,11 @@ public class PlayerModel : NetworkBehaviour
             if (networkInputData.isFirePressed)
             {
                 Shoot();
+            }
+
+            if (networkInputData.isFire2Pressed)
+            {
+                ShootRocket();
             }
 
             if (networkInputData.isBootsPressed)
@@ -114,7 +127,7 @@ public class PlayerModel : NetworkBehaviour
     {
         //generamos un tiempo de disparo para q el autoshoot no dependa del ping
 
-        if (Time.time - _lastFireTime < 0.15f)
+        if (Time.time - _lastFireTime < _shootCooldown)
         {
             return;
         }
@@ -124,15 +137,30 @@ public class PlayerModel : NetworkBehaviour
 
         Runner.Spawn(_bulletPrefab, _firePosition.position, transform.rotation);
     }
+    void ShootRocket()
+    {
+        if (Time.time - _lastFireTime < _shootRocketCooldown)
+        {
+            return;
+        }
+
+        StartCoroutine(ShootCooldown());
+        _lastFireTime = Time.time;
+
+        Runner.Spawn(_rocketPrefab, _firePosition.position, transform.rotation);
+
+    }
     void ToggleBoots()
     {
         if (_isBoots)
         {
             Physics.gravity = new Vector3(0,-5,0);
+            _currentColor = _originalColor;
         }
         else
         {
             Physics.gravity = new Vector3(0, -90, 0);
+            _currentColor = Color.black;
         }
 
         _isBoots = !_isBoots;
@@ -164,7 +192,6 @@ public class PlayerModel : NetworkBehaviour
 
     static void PointsChangedCallback(Changed<PlayerModel> changed)
     {
-        Debug.Log("[PlayerModel - PointsChangedCallback]");
         changed.Behaviour.OnUpdatePointsbar(changed.Behaviour._points);
     }
 
@@ -207,6 +234,11 @@ public class PlayerModel : NetworkBehaviour
             changed.Behaviour.RPC_AddPoints();
             changed.Behaviour.inAltar = false;
         }
+    }
+    static void colorChangedCallback(Changed<PlayerModel> changed)
+    {
+        changed.Behaviour._myRenderer.material.color = changed.Behaviour._currentColor;
+
     }
 
     void Dead()

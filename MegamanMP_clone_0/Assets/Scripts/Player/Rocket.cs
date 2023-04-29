@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
 
-public class Bullet : NetworkBehaviour
+public class Rocket : NetworkBehaviour
 {
     [SerializeField] NetworkRigidbody _rgbd;
 
@@ -11,8 +11,6 @@ public class Bullet : NetworkBehaviour
     float _dmg;
     [SerializeField]
     float _initialForce;
-
-
 
     void Start()
     {

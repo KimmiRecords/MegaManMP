@@ -1100,14 +1100,16 @@ MonoBehaviour:
   _rgbd: {fileID: 7194610207018698706}
   _animator: {fileID: 2209995131957841158}
   _bulletPrefab: {fileID: 5405758708494020408, guid: b02db842977742948b157fa122f31f2e, type: 3}
+  _rocketPrefab: {fileID: 6602580400849272940, guid: 9ac8ce75ae28d464e974e5ad2fb47338, type: 3}
   _shootParticle: {fileID: 7947760315533553101}
   _firePosition: {fileID: 7746546883669662549}
   _myRenderer: {fileID: 7312221263632470686}
   _speed: 4
   _jumpForce: 6
+  _shootCooldown: 0.2
+  _shootRocketCooldown: 0.4
   __life: 100
   __points: 0
-  _skinColor: {r: 1, g: 0, b: 0, a: 0}
 --- !u!114 &9166310692877586250
 MonoBehaviour:
   m_ObjectHideFlags: 0
