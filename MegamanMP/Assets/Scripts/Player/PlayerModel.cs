@@ -43,6 +43,10 @@ public class PlayerModel : NetworkBehaviour
     float _maxSpeed;
     Vector3 spawnPosition;
     bool _isBoots;
+    [Networked(OnChanged = nameof(colorChangedCallback))]
+    Color _currentColor { get; set; }
+
+    Color _originalColor;
 
     void Start()
     {
@@ -50,7 +54,9 @@ public class PlayerModel : NetworkBehaviour
         spawnPosition = transform.position;
         _maxLife = _life;
         _maxSpeed = _speed;
-        _myRenderer.material.color = UnityEngine.Random.ColorHSV(0, 1, 1, 1, 1, 1);
+        _originalColor = UnityEngine.Random.ColorHSV(0, 1, 1, 1, 1, 1);
+        _currentColor = _originalColor;
+        //_myRenderer.material.color = _currentColor;
     }
     public override void Spawned()
     {
@@ -149,10 +155,12 @@ public class PlayerModel : NetworkBehaviour
         if (_isBoots)
         {
             Physics.gravity = new Vector3(0,-5,0);
+            _currentColor = _originalColor;
         }
         else
         {
             Physics.gravity = new Vector3(0, -90, 0);
+            _currentColor = Color.black;
         }
 
         _isBoots = !_isBoots;
@@ -184,7 +192,6 @@ public class PlayerModel : NetworkBehaviour
 
     static void PointsChangedCallback(Changed<PlayerModel> changed)
     {
-        Debug.Log("[PlayerModel - PointsChangedCallback]");
         changed.Behaviour.OnUpdatePointsbar(changed.Behaviour._points);
     }
 
@@ -227,6 +234,11 @@ public class PlayerModel : NetworkBehaviour
             changed.Behaviour.RPC_AddPoints();
             changed.Behaviour.inAltar = false;
         }
+    }
+    static void colorChangedCallback(Changed<PlayerModel> changed)
+    {
+        changed.Behaviour._myRenderer.material.color = changed.Behaviour._currentColor;
+
     }
 
     void Dead()
