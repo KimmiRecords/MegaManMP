@@ -7,8 +7,8 @@ public class CharacterInputHandler : MonoBehaviour
     float _moveInput;
     bool _isJumpPressed;
     bool _isFirePressed;
+    bool _isFire2Pressed;
     bool _isBootsPressed;
-
 
     PlayerModel _myModel;
     NetworkInputData _inputData;
@@ -16,6 +16,7 @@ public class CharacterInputHandler : MonoBehaviour
     void Start()
     {
         _myModel = GetComponent<PlayerModel>();
+        _inputData = new NetworkInputData();
 
         //if (!_myModel.HasInputAuthority)
         //{
@@ -25,9 +26,6 @@ public class CharacterInputHandler : MonoBehaviour
         //{
         //    UpdateManager.Instance.RegisterUpdate();
         //}
-
-        _inputData = new NetworkInputData();
-
     }
 
     //void FakeUpdate()
@@ -52,7 +50,6 @@ public class CharacterInputHandler : MonoBehaviour
             return;
         }
 
-
         _moveInput = Input.GetAxis("Horizontal");
 
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space))
@@ -64,15 +61,16 @@ public class CharacterInputHandler : MonoBehaviour
         {
             _isFirePressed = true;
         }
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            _isFire2Pressed = true;
+        }
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             _isBootsPressed = true;
         }
-
-        
     }
-
 
     //esto lo ejecuta el playermodel para enterarse de los inputs
     public NetworkInputData GetNetworkInput()
@@ -84,6 +82,8 @@ public class CharacterInputHandler : MonoBehaviour
 
         _inputData.isFirePressed = _isFirePressed;
         _isFirePressed = false;
+        _inputData.isFire2Pressed = _isFire2Pressed;
+        _isFire2Pressed = false;
 
         _inputData.isBootsPressed = _isBootsPressed;
         _isBootsPressed = false;

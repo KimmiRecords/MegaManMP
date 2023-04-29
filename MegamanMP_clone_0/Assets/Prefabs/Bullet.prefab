@@ -80,7 +80,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
   _rgbd: {fileID: 3498631369155523936}
-  _dmg: 10
+  _dmg: 5
+  _initialForce: 35
 --- !u!114 &2353959386114361453
 MonoBehaviour:
   m_ObjectHideFlags: 0

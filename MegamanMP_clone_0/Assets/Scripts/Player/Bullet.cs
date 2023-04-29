@@ -8,8 +8,9 @@ public class Bullet : NetworkBehaviour
     [SerializeField] NetworkRigidbody _rgbd;
 
     [SerializeField]
-    float _dmg = 1f;
-    float _initialForce = 20f;
+    float _dmg;
+    [SerializeField]
+    float _initialForce;
 
 
 

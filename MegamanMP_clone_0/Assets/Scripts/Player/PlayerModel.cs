@@ -9,12 +9,16 @@ public class PlayerModel : NetworkBehaviour
     [SerializeField] NetworkRigidbody _rgbd;
     [SerializeField] Animator _animator;
     [SerializeField] Bullet _bulletPrefab;
+    [SerializeField] Rocket _rocketPrefab;
     [SerializeField] ParticleSystem _shootParticle;
     [SerializeField] Transform _firePosition;
     [SerializeField] Renderer _myRenderer;
 
     [SerializeField] float _speed;
     [SerializeField] float _jumpForce;
+    [SerializeField] float _shootCooldown;
+    [SerializeField] float _shootRocketCooldown;
+
 
     [Networked(OnChanged = nameof(LifeChangedCallback))]
     [SerializeField] float _life { get; set; }
@@ -30,7 +34,6 @@ public class PlayerModel : NetworkBehaviour
 
     public event Action<float> OnUpdateLifebar = delegate { };
     public event Action<float> OnUpdatePointsbar = delegate { };
-
     public event Action OnPlayerDestroyed = delegate {};
 
     [Networked(OnChanged = nameof(inAltarChangedCallback))]
@@ -47,7 +50,6 @@ public class PlayerModel : NetworkBehaviour
         spawnPosition = transform.position;
         _maxLife = _life;
         _maxSpeed = _speed;
-
         _myRenderer.material.color = UnityEngine.Random.ColorHSV(0, 1, 1, 1, 1, 1);
     }
     public override void Spawned()
@@ -74,6 +76,11 @@ public class PlayerModel : NetworkBehaviour
             if (networkInputData.isFirePressed)
             {
                 Shoot();
+            }
+
+            if (networkInputData.isFire2Pressed)
+            {
+                ShootRocket();
             }
 
             if (networkInputData.isBootsPressed)
@@ -114,7 +121,7 @@ public class PlayerModel : NetworkBehaviour
     {
         //generamos un tiempo de disparo para q el autoshoot no dependa del ping
 
-        if (Time.time - _lastFireTime < 0.15f)
+        if (Time.time - _lastFireTime < _shootCooldown)
         {
             return;
         }
@@ -123,6 +130,19 @@ public class PlayerModel : NetworkBehaviour
         _lastFireTime = Time.time;
 
         Runner.Spawn(_bulletPrefab, _firePosition.position, transform.rotation);
+    }
+    void ShootRocket()
+    {
+        if (Time.time - _lastFireTime < _shootRocketCooldown)
+        {
+            return;
+        }
+
+        StartCoroutine(ShootCooldown());
+        _lastFireTime = Time.time;
+
+        Runner.Spawn(_rocketPrefab, _firePosition.position, transform.rotation);
+
     }
     void ToggleBoots()
     {
