@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -657,7 +657,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 916675218}
-  m_RootOrder: 20
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -180}
 --- !u!65 &251108006
 BoxCollider:
@@ -2141,6 +2141,7 @@ Transform:
   - {fileID: 1141963908}
   - {fileID: 1685173437}
   - {fileID: 5}
+  - {fileID: 251108005}
   - {fileID: 545946653}
   - {fileID: 2062431932}
   - {fileID: 1624548306}
@@ -2151,7 +2152,6 @@ Transform:
   - {fileID: 940754240}
   - {fileID: 531052799}
   - {fileID: 1825340476}
-  - {fileID: 251108005}
   - {fileID: 2044025758}
   - {fileID: 1840695593}
   - {fileID: 499699657}
@@ -9483,7 +9483,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &5333721387219837626
 MonoBehaviour:
   m_ObjectHideFlags: 0
